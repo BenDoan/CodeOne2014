@@ -6,7 +6,7 @@ from os import path
 
 from functools import wraps
 from flask import *
-
+from transaction import Transaction
 DATA_FNAME = '/tmp/data.p'
 
 app = Flask(__name__)
@@ -19,13 +19,23 @@ app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 def index():
     return render_template("index.html")
 
+@app.route('/transactions',methods=['GET',"POST"])
+def transactions():
+    if request.method == "POST":
+        tmap = json.loads(request.get("body"))
+        g.data["transactions"].append(map(lambda x : Transaction(**x), tmap))
+    print g.data
+    return json.dumps(map(Transaction.dict,g.data["transactions"]))
+
+
+
 @app.before_request
 def before_request():
     """instantiates a new dataobject and stores it as a global variable"""
     if path.isfile(DATA_FNAME):
         g.data = pickle.load(open(DATA_FNAME, "rb"))
     else:
-        g.data = {}
+        g.data = {"transactions":[]}
 
 @app.teardown_request
 def teardown_request(exception):
