@@ -16,6 +16,13 @@ app.config['DEBUG'] = True
 app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
+def get_bucket(ident):
+    for b in g.data["buckets"]:
+        if b.ident == ident :
+            return b
+    return None
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template("index.html")
