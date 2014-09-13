@@ -23,11 +23,17 @@ def index():
 def transactions():
     if request.method == "POST":
         tmap = json.loads(request.get("body"))
-        g.data["transactions"].append(map(lambda x : Transaction(**x), tmap))
+        g.data["transactions"].extend(map(lambda x : Transaction(**x), tmap))
     print g.data
     return json.dumps(map(Transaction.dict,g.data["transactions"]))
 
-
+@app.route("/ingest",methods=["GET"])
+def ingest():
+    with open(request.args.get("fname"),"r") as fil:
+        g.data["transactions"].extend(map(
+            lambda x: Transaction(x["Trans Desc"],int(100*float(x["Tran Amt"])),x),
+            json.load(fil)))
+    return ":-}"
 
 @app.before_request
 def before_request():
