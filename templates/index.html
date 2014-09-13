@@ -8,12 +8,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title></title>
         <meta name="description" content="">
+
+
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-        <link rel="stylesheet" href="../static/css/normalize.css">
-        <link rel="stylesheet" href="../static/css/main.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='../static/css/main.css') }}">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 
         <!-- Optional theme -->
@@ -21,7 +23,7 @@
 
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-        <script src="../static/js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="{{ url_for('static', filename='../static/js/vendor/modernizr-2.6.2.min.js') }}"></script>
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -34,8 +36,8 @@
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
-        <script src="../static/js/plugins.js"></script>
-        <script src="../static/js/main.js"></script>
+        <script src="{{ url_for('static', filename='../static/js/plugins.js') }}"></script>
+        <script src="{{ url_for('static', filename='../static/js/main.js') }}"></script>
 
     </body>
 </html>
