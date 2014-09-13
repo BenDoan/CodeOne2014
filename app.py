@@ -1,5 +1,6 @@
 import json
 import pickle
+import sys
 
 from os import path
 
@@ -34,4 +35,18 @@ def teardown_request(exception):
         pickle.dump(data, open(DATA_FNAME, "wb"))
 
 if __name__ == "__main__":
-    app.run(host="0.0.0")
+    if len(sys.argv) == 1:
+        app.run(host="0.0.0")
+    else:
+        typ = sys.argv[1]
+        fname = sys.argv[2]
+
+        f = json.loads(open(fname, "r").read())
+
+        if typ == "credit":
+            for e in f:
+                t = Transaction(e['Merchant Name'], e['Transaction Amount'])
+
+        for x in f:
+            print x
+            print ""
