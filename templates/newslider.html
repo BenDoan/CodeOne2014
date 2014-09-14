@@ -1,0 +1,42 @@
+<link href="../static/css/jquery.nouislider.css" rel="stylesheet">
+</br>
+</br>
+<div id="slide1"class="sliders sliderBucket"></div>
+</br>
+</br>
+<div id="slide2"class="sliders sliderBucket"></div>
+<script src="jquery.js"></script>
+<script src="../static/js/jquery.nouislider.js"></script>
+<script type="text/javascript">
+
+	$(document).ready(function(){
+			$('.sliders').noUiSlider({
+start: 127,
+connect: "lower",
+orientation: "horizontal",
+range: {
+'min': 0,
+'max':1
+},
+})
+			$('.sliders').on('slide', updateSlide);
+
+
+			function updateSlide(){
+
+			var total = 0.0;
+			for (i = 0; i < $('.sliderBucket').length; i++) {
+			total += parseFloat(($(".sliderBucket").eq(i).val()))
+			console.log("total " + total + "\n")
+
+			}
+			devide = total - 1.0
+				devide = devide / ($('.sliderBucket').length- 1 )
+
+				for (i = 0; i < $('.sliderBucket').length; i++) {
+					$(".sliderBucket").eq(i).val([ $(".sliderBucket").eq(i).val() + devide])
+				}
+			}
+})
+</script>
+
