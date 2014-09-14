@@ -19,14 +19,14 @@ class Bucket():
 
 defaults = {
 "utility":Bucket("utilities",color="#1f77b4"),
-"food":Bucket("food",color="#2ca02c")
-"cash":Bucket("cash")
-"recreation":Bucket("recreation")
-"paycheck":Bucket("paycheck")
-"investment":Bucket("investment")
-"loan":Bucket("loan")
-"fee":Bucket("fee")
-"return":Bucket("return")
+"food":Bucket("food",color="#2ca02c"),
+"cash":Bucket("cash"),
+"recreation":Bucket("recreation"),
+#"paycheck":Bucket("paycheck"),
+"investment":Bucket("investment"),
+"loan":Bucket("loan"),
+"fee":Bucket("fee"),
+#"return":Bucket("return")
 }
 
 
@@ -34,16 +34,16 @@ mapping = {
 "Grocery":defaults["food"],
 "Restaurant":defaults["food"],
 "Auto/Gas":defaults["utility"],
-"Utilities":defaults["utility"]
-"Recreation":defaults["Recreation"]
-"ATM / CASH":defaults["cash"]
-"Paycheck":defaults["paycheck"]
-"Investment":defaults["investment"]
-"Loan Payment":defaults["loan"]
+"Utilities":defaults["utility"],
+"Recreation":defaults["recreation"],
+"ATM / CASH":defaults["cash"],
+#"Paycheck":defaults["paycheck"],
+"Investment":defaults["investment"],
+"Loan Payment":defaults["loan"],
 
-"Fee":defaults["fee"]
-"Service Fee":defaults["fee"]
-"Returned Purchase":defaults["return"]
+"Fee":defaults["fee"],
+"Service Fee":defaults["fee"],
+#"Returned Purchase":defaults["return"]
 
 }
 
