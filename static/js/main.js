@@ -83,10 +83,13 @@ d3.json("dailyhist",function(data){
   nv.addGraph(function() {
     var chart = nv.models.multiBarChart()
       .transitionDuration(350)
-      .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
-      .rotateLabels(0)      //Angle to rotate x-axis labels.
+      .reduceXTicks(false)   //If 'false', every single x-axis tick label will be rendered.
+      .rotateLabels(-30)      //Angle to rotate x-axis labels.
       .showControls(true)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
       .groupSpacing(0.1)    //Distance between each group of bars.
+      .color(function(d){
+        return d.color;
+      })
     ;
     /*var chart = nv.models.cumulativeLineChart()
                   .x(function(d) { return d[0] })
@@ -96,7 +99,7 @@ d3.json("dailyhist",function(data){
                   ;*/
 
      chart.xAxis
-        .tickValues([1078030800,1122782400,1167541200,1251691200])
+//        .tickValues([1078030800000,1122782400000,1167541200000,1251691200000])
         .tickFormat(function(d) {
             return d3.time.format('%x')(new Date(d*1000))
           });

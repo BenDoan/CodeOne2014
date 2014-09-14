@@ -106,31 +106,39 @@ def ingest():
     with open(request.args.get("fname"),"r") as fil:
         g.data["transactions"].extend(map(transaction.create,json.load(fil)))
     g.data["transactions"].sort(key =lambda x : x.date)
-    return ":-}"
+    return "ingest finished"
 
 @app.route('/dailyhist',methods=["GET"])
 def dailyhist():
     out = {}
+    def tfunc(t):
+        return int(t/604800)*604800
     for x in g.data["buckets"] :
         out[x.name]={}
     out["unknown"]={}
     for t in g.data["transactions"] :
         remainder = t.amount
+        d = tfunc(t.date)
+        for b in g.data["buckets"] :
+            if d not in out[b.name] :
+                out[b.name][d] = 0
         for b in t.buckets :
-            if t.date not in out[b[0].name] :
-                out[b[0].name][t.date] = 0
-            out[b[0].name][t.date] += b[1]*t.amount
+            out[b[0].name][d] += b[1]*t.amount
             remainder -= b[1]*t.amount
-        if t.date not in out["unknown"]:
-            out["unknown"][t.date] = 0
-        out["unknown"][t.date] += remainder
+        if d not in out["unknown"]:
+            out["unknown"][d] = 0
+        out["unknown"][d] += remainder
     rout = []
     for k in out :
         tmp = []
         for x in out[k] :
             tmp.append({"x":x,"y":out[k][x]/100.0})
         tmp.sort(key=lambda x:x["x"])
-        rout.append({"key":k,"values":tmp})
+        rout.append({"key":k,"values":tmp,"color":"rgb(50%,50%,50%)"})
+        for x in g.data["buckets"]:
+            if x.name == k:
+                rout[-1]["color"] = x.color
+                break
     print rout
     return json.dumps(rout)
 
