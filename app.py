@@ -1,6 +1,8 @@
 import json
 import pickle
 import sys
+import time
+import random
 
 from os import path
 
@@ -18,18 +20,6 @@ app.config['DEBUG'] = True
 app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
-def map_b2t():
-    out = {}
-    for b in g.data["buckets"] :
-        out[b.name] = []
-        for t in g.data["transactions"]:
-            for x in t.buckets :
-                if x[0] == b :
-                    out[b.name].append(t.json())
-                    break
-    return out
-        
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template("index.html")
@@ -41,6 +31,33 @@ def budget():
 @app.route('/investments', methods=['GET', 'POST'])
 def investments():
     return render_template("investments.html")
+
+@app.route('/add_bucket', methods=['GET', 'POST'])
+def add_bucket():
+    return render_template("add_bucket.html")
+
+@app.route('/action_add_bucket', methods=['GET', 'POST'])
+def action_add_bucket():
+    g.data['buckets'].append(Bucket(request.form['name']))
+    return redirect("/budget")
+
+def map_b2t():
+    out = {}
+    for b in g.data["buckets"] :
+        out[b.name] = []
+        for t in g.data["transactions"]:
+            for x in t.buckets :
+                if x[0] == b :
+                    out[b.name].append(t.json())
+                    break
+    return out
+
+
+def get_bucket(ident):
+    for b in g.data["buckets"]:
+        if b.ident == ident :
+            return b
+    return None
 
 @app.route('/transactions',methods=['GET',"POST"])
 def transactions():
@@ -109,6 +126,14 @@ def month_transactions_per_bucket():
             d[key].sort(key=lambda x: x[0])
             a.append({"key": key, "values": d[key]})
     return json.dumps(random.sample(a, 5))
+
+@app.route('/bucket-values.json',methods=['GET'])
+def getBucketValues():
+    a = []
+    for b in g.data['buckets']:
+        if b.value > 0:
+            a.append({"label": b.name, "value": b.value})
+    return json.dumps(a)
 
 @app.before_request
 def before_request():

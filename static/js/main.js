@@ -1,50 +1,53 @@
-nv.addGraph(function() {
-  var chart = nv.models.pieChart()
-      .x(function(d) { return d.label })
-      .y(function(d) { return d.value })
-      .showLabels(true)
-      .labelThreshold(.05)
-      .labelType("percent")
-      .donut(true)
-      .donutRatio(0.35)
-      ;
+d3.json("bucket-values.json", function(data){
+    nv.addGraph(function() {
+      var chart = nv.models.pieChart()
+          .x(function(d) { return d.label })
+          .y(function(d) { return d.value })
+          .showLabels(true)
+          .labelThreshold(.05)
+          .labelType("percent")
+          .donut(true)
+          .donutRatio(0.35)
+          ;
 
-    d3.select("#chart2 svg")
-        .datum(exampleData())
-        .transition().duration(350)
-        .call(chart);
+        d3.select("#chart2 svg")
+            .datum(data)
+            .transition().duration(350)
+            .call(chart);
 
-  return chart;
+      return chart;
+    });
 });
 
 
-d3.json("month-transactions-per-bucket.json", function(data){
-    nv.addGraph(function() {
-        var chart = nv.models.cumulativeLineChart()
-                      .x(function(d) { return d[0] })
-                      .y(function(d) { return d[1] })
-                      .color(d3.scale.category10().range())
-                      .useInteractiveGuideline(true)
-                      ;
+//d3.json("month-transactions-per-bucket.json", function(data){
+    //nv.addGraph(function() {
+        //var chart = nv.models.cumulativeLineChart()
+                      //.x(function(d) { return d[0] })
+                      //.y(function(d) { return d[1] })
+                      //.color(d3.scale.category10().range())
+                      //.useInteractiveGuideline(true)
+                      //;
 
-         chart.xAxis
-            .tickFormat(function(d) {
-                return d3.time.format('%x')(new Date(d))
-          });
+         //chart.xAxis
+            //.tickFormat(function(d) {
+                //return d3.time.format('%x')(new Date(d))
+          //});
 
-        chart.yAxis
-            .tickFormat(d3.format('+$,.2f'));
+        //chart.yAxis
+            //.tickFormat(d3.format('+$,.2f'));
 
-        d3.select('#chart svg')
-            .datum(data)
-            .call(chart);
+        //d3.select('#chart svg')
+            //.datum(data)
+            //.call(chart);
 
-        //TODO: Figure out a good way to do this automatically
-        nv.utils.windowResize(chart.update);
+        ////TODO: Figure out a good way to do this automatically
+        //nv.utils.windowResize(chart.update);
 
-        return chart;
-    });
-})
+        //return chart;
+    //});
+//})
+
 d3.json("bucketmap",function(data){
 console.log(data);
 vals = {};

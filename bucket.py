@@ -1,9 +1,10 @@
 import json
 class Bucket():
-    def __init__(self,name,mutable=True,active=True):
+    def __init__(self,name,mutable=True,active=True, value=0):
         self.name = name
         self.active = active
         self.mutable = mutable
+        self.value = value # percent from 0 to 1
         val = 0
         for c in self.name :
             val += ord(c)

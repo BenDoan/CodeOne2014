@@ -31,22 +31,11 @@
                 </tr>
             </thead>
             <tbody>
+            {% for row in g.data['buckets'] %}
                 <tr>
-                	<td>Food</td>
-                	<td>50%</td>
+                    <td>{{ row.name }}</td>
                 </tr>
-                <tr>
-                	<td>Food</td>
-                	<td>50%</td>
-                </tr>
-                <tr>
-                	<td>Food</td>
-                	<td>50%</td>
-                </tr>
-                <tr>
-                	<td>Food</td>
-                	<td>50%</td>
-                </tr>
+            {% endfor %}
             </tbody>
         </table>
         <a href="/add_bucket" class="btn btn-default">Add Bucket</a>
