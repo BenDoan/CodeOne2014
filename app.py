@@ -1,6 +1,9 @@
 import json
 import pickle
 import sys
+import time
+import random
+import datetime
 
 from os import path
 
@@ -8,8 +11,6 @@ from functools import wraps
 from flask import *
 from transaction import Transaction
 from bucket import Bucket
-import bucket
-import transaction
 DATA_FNAME = '/tmp/data.p'
 
 app = Flask(__name__)
@@ -18,19 +19,14 @@ app.config['DEBUG'] = True
 app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
-def map_b2t():
-    out = {}
-    for b in g.data["buckets"] :
-        out[b.name] = []
-        for t in g.data["transactions"]:
-            for x in t.buckets :
-                if x[0] == b :
-                    out[b.name].append(t.json())
-                    break
-    return out
-        
+def get_bucket(ident):
+    for b in g.data["buckets"]:
+        if b.ident == ident :
+            return b
+    return None
 
-app.route('/', methods=['GET', 'POST'])
+
+@app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template("index.html")
 
@@ -64,15 +60,39 @@ def buckets():
             g.data["buckets"].append(Bucket(request.args.get("name"),len(g.data["buckets"])))
     return json.dumps(map(Bucket.json,g.data["buckets"]))
 
-@app.route("/asdf",methods=["GET"])
-def func():
-    return json.dumps(map_b2t())
-
 @app.route("/ingest",methods=["GET"])
 def ingest():
     with open(request.args.get("fname"),"r") as fil:
-        g.data["transactions"].extend(map(transaction.create,json.load(fil)))
+        g.data["transactions"].extend(map(
+            lambda x: Transaction(int(x["id"]if "id" in x else 0),x["Trans Desc"],int(100*float(x["Tran Amt"])),x, x["Merchant Type"]), json.load(fil)))
     return ":-}"
+
+@app.route('/month-transactions-per-bucket.json',methods=['GET'])
+def month_transactions_per_bucket():
+    d = {}
+    a1 = []
+    for e in g.data['transactions']:
+        today = datetime.date.today()
+        first = datetime.date(day=1, month=today.month, year=today.year)
+        lastMonth = first - datetime.timedelta(days=30)
+
+        date = time.mktime(time.strptime(e.metadata['Post Dt'], "%m/%d/%Y"))
+        if date < lastMonth:
+            continue
+
+        entry = [int(date)*1000, e.amount]
+        bname = e.metadata['Merchant Type']
+        if bname in d:
+            d[bname].append(entry)
+        else:
+            d[bname] = [entry]
+
+    a = []
+    for key in d:
+        if key != "#N/A":
+            d[key].sort(key=lambda x: x[0])
+            a.append({"key": key, "values": d[key]})
+    return json.dumps(random.sample(a, 5))
 
 @app.before_request
 def before_request():
@@ -80,7 +100,7 @@ def before_request():
     if path.isfile(DATA_FNAME):
         g.data = pickle.load(open(DATA_FNAME, "rb"))
     else:
-        g.data = {"transactions":[],"buckets":bucket.defaults.values()}
+        g.data = {"transactions":[],"buckets":[]}
 
 @app.teardown_request
 def teardown_request(exception):

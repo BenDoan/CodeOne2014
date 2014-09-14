@@ -1,0 +1,72 @@
+.main-content p {
+  line-height:1.3; /* Make this a little smaller than the line-height defined in content.css because IE7 line-height is slightly different than IE8+, resulting in scrollbars on some fixed-height containers */
+}
+
+/* image-index ***** */
+/* image-index ***** */
+/* image-index ***** */
+.main-content ul.image-index > li {
+  border:none!important;
+  border-top:1px solid #e6e7e8!important;
+  clear:left!important;
+	display:block!important;
+	float:none!important;
+  margin-top:0;
+	width:auto!important;
+}
+.main-content ul.image-index > li.first-row {
+  border-top:none!important;
+}
+.main-content ul.image-index > li.first-row.even {
+  border-top:1px solid #e6e7e8!important;
+  padding-top:10px!important;
+}
+.main-content ul.image-index.large-image > li {
+	min-height:120px;
+	height:auto!important;
+	height:120px;
+}
+.main-content ul.image-index.small-image > li {
+	min-height:80px;
+	height:auto!important;
+	height:80px;
+}
+.main-content ul.image-index.image-left.small-image > li {
+  padding-left:70px!important; /* 10px more than the image width */
+}
+.main-content ul.image-index.image-left.large-image > li {
+  padding-left:110px!important; /* 10px more than the image width */
+}
+.main-content ul.image-index.image-right > li,
+.main-content ul.image-index.no-image > li {
+  padding-left:0!important;
+}
+.main-content ul.image-index.image-left > li img.image-index {
+  left:0!important;
+}
+.main-content ul.image-index.image-right > li img.image-index {
+  right:0!important;
+}
+.main-content ul.image-index li.first-row.even img.image-index {
+	top:10px!important;
+}
+
+/* image-index ***** */
+
+/* header banner ***** */
+/* header banner ***** */
+/* header banner ***** */
+.main-content .header.banner .content {
+  margin-top:30px;
+}
+/* header banner ***** */
+
+
+/* accordions ***** */
+/* accordions ***** */
+/* accordions ***** */
+.main-content .accordion-content {
+  border-bottom:1px solid #b3b3b3;
+  margin-bottom:-1px;
+}
+/* accordions ***** */
