@@ -3,7 +3,7 @@ import bucket
 import hashlib
 
 
-dumbfields = ["description","id","amount","metadata","account"]
+dumbfields = ["description","id","amount","metadata","account","date"]
 def create(json):
     print bucket.mapping
     buckets = []
@@ -11,7 +11,8 @@ def create(json):
     dmap = {
         "Trans Desc":"description",
         "id":"id",
-        "Acct Nbr":"account"}
+        "Acct Nbr":"account",
+        "Post Dt":"date"}
     for x in dmap :
         imap[dmap[x]] = json[x]
     imap["metadata"] = json

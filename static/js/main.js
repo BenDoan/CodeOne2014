@@ -45,6 +45,40 @@ d3.json("month-transactions-per-bucket.json", function(data){
         return chart;
     });
 })
+d3.json("bucketmap",function(data){
+console.log(data);
+vals = {};
+for(var val in data){
+    vals[val] = data[val];
+}
+    console.log(vals);
+  nv.addGraph(function() {
+    var chart = nv.models.cumulativeLineChart()
+                  .x(function(d) { return d[0] })
+                  .y(function(d) { return d[1]/100 }) //adjusting, 100% is 1.00, not 100 as it is in the data
+                  .color(d3.scale.category10().range())
+                  .useInteractiveGuideline(true)
+                  ;
+
+     chart.xAxis
+        .tickValues([1078030800000,1122782400000,1167541200000,1251691200000])
+        .tickFormat(function(d) {
+            return d3.time.format('%x')(new Date(d))
+          });
+
+    chart.yAxis
+        .tickFormat(d3.format(',.1%'));
+
+    d3.select('#chart svg')
+        .datum(data)
+        .call(chart);
+
+    //TODO: Figure out a good way to do this automatically
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+});
 
 function exampleData() {
     return [{"label": "DOUBLETREE HOTELS", "value": 120.34}, {"label": "Roofing,Sheet Metal Work, Siding Contractors", "value": 220.0}, {"label": "Direct Marketing ? Catalog Merchant", "value": 553.93}, {"label": "Theatrical Producers (except Motion Pictures)", "value": 56.0}, {"label": "Artist?s Supply and Craft Shops", "value": 104.72}, {"label": "Grocery Stores/Supermarkets", "value": 1626.59}, {"label": "Professional Services-not Elsewhere Classified", "value": 210.0}]
