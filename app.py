@@ -34,6 +34,10 @@ def index():
 def budget():
     return render_template("budget.html")
 
+@app.route('/investments', methods=['GET', 'POST'])
+def investments():
+    return render_template("investments.html")
+
 @app.route('/transactions',methods=['GET',"POST"])
 def transactions():
     if request.method == "POST":
