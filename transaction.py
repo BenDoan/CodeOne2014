@@ -24,6 +24,7 @@ def create(json):
     imap["amount"] = int(100*float(json["Tran Amt"]))
     imap["key"] = hashlib.md5(str(imap["account"])+"-"+str(imap["id"])).hexdigest()
     if json["Category"] in bucket.mapping:
+        print json["Category"]
         print "YEP"
         buckets.append([bucket.mapping[json["Category"]],1.0])
     imap["buckets"] = buckets

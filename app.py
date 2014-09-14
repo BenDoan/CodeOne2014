@@ -112,7 +112,7 @@ def bucketmap():
 @app.route("/ingest",methods=["GET"])
 def ingest():
     with open(request.args.get("fname"),"r") as fil:
-        g.data["transactions"].extend(map(transaction.create,json.load(fil)))
+        g.data["transactions"].extend(map(transaction.create,filter(lambda x : x["Category"]!="Paycheck" and x["Category"]!="Returned Purchase",json.load(fil))))
     g.data["transactions"].sort(key =lambda x : x.date)
     return "ingest finished"
 
