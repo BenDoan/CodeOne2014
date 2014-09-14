@@ -41,6 +41,14 @@ def action_add_bucket():
     g.data['buckets'].append(Bucket(request.form['name']))
     return redirect("/budget")
 
+@app.route('/budget_val_ingest', methods=['GET', 'POST'])
+def budget_val_ingest():
+    print(request.form)
+    for bucket in g.data['buckets']:
+        if bucket.name == request.form['name']:
+            bucket.value = int(request.form['value'])
+    return ""
+
 def map_b2t():
     out = {}
     for b in g.data["buckets"] :
