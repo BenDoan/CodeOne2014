@@ -19,6 +19,8 @@ def create(json):
         imap[dmap[x]] = json[x]
     imap["date"] = time.mktime(time.strptime(imap["date"],"%m/%d/%Y"))
     imap["metadata"] = json
+    imap["name"] = imap["name"].strip()
+    imap["description"] = imap["description"].strip()
     imap["amount"] = int(100*float(json["Tran Amt"]))
     imap["key"] = hashlib.md5(str(imap["account"])+"-"+str(imap["id"])).hexdigest()
     if json["Category"] in bucket.mapping:

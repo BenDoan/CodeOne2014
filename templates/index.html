@@ -9,7 +9,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h3>Transaction History</h3>
+        <h3>Weekly Transaction History</h3>
     </div>
 </div>
 
@@ -20,6 +20,7 @@
         </div>
     </div>
 </div>
+
 
 <div class="row">
     <div class="col-md-12">
@@ -32,10 +33,14 @@
                 </tr>
             </thead>
             <tbody>
-            {% for transaction in g.data["transactions"] %}
+            {% for transaction in g.data["transactions"][:-20:-1] %}
                 <tr>
                     <td>${{transaction.amount/100.0}}</td>
+                    {% if transaction.description == "" %}
+                    <td>{{transaction.name}}</td>
+                    {%else%}
                     <td>{{transaction.description | truncate(60)}}</td>
+                    {%endif%}
                     <td width="50%"><div class="progress">
                         {% for bucket in transaction.buckets %}
                         <div class="progress-bar" style="width: {{bucket[1]*100}}%;background-color: {{bucket[0].color}}">${{(bucket[1]*transaction.amount)/100.0}}</div>

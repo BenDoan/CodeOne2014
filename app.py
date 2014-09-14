@@ -20,6 +20,9 @@ app.config['DEBUG'] = True
 app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
+def last20backwards():
+    return reversed(g.data["transactions"][-20:0])
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template("index.html")
@@ -134,7 +137,7 @@ def dailyhist():
         for x in out[k] :
             tmp.append({"x":x,"y":out[k][x]/100.0})
         tmp.sort(key=lambda x:x["x"])
-        rout.append({"key":k,"values":tmp,"color":"rgb(50%,50%,50%)"})
+        rout.append({"key":k,"values":tmp,"color":"#7f7f7f"})
         for x in g.data["buckets"]:
             if x.name == k:
                 rout[-1]["color"] = x.color
@@ -175,7 +178,7 @@ def getBucketValues():
     a = []
     for b in g.data['buckets']:
         if b.value > 0:
-            a.append({"label": b.name, "value": b.value})
+            a.append({"label": b.name, "value": b.value,"color":b.color})
     return json.dumps(a)
 
 @app.before_request

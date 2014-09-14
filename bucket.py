@@ -1,6 +1,6 @@
 import json
 class Bucket():
-    def __init__(self,name,mutable=True,active=True, value=0):
+    def __init__(self,name,mutable=True,active=True, value=0,color=None):
         self.name = name
         self.active = active
         self.mutable = mutable
@@ -8,15 +8,18 @@ class Bucket():
         val = 0
         for c in self.name :
             val += ord(c)
-        self.color = "hsl("+str(255*((val*135)%251)/251.0)+",100%,50%)"
+        if color is None :
+            self.color = "hsl("+str(255*((val*135)%251)/251.0)+",100%,50%)"
+        else :
+            self.color = color
     def __str__(self):
         return json.dumps(self.json())
     def json(self):
         return self.__dict__
 
 defaults = {
-"utility":Bucket("utilities"),
-"food":Bucket("food")
+"utility":Bucket("utilities",color="#1f77b4"),
+"food":Bucket("food",color="#2ca02c")
 }
 
 

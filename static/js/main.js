@@ -15,7 +15,7 @@ $(".budget-range").mouseleave( function(e){
               .labelType("percent")
               .donut(true)
               .donutRatio(0.35)
-              .color(function(d){return d.color})
+              .color(function(d){return d.data.color})
               ;
 
             d3.select("#chart2 svg")
@@ -38,7 +38,7 @@ d3.json("bucket-values.json", function(data){
           .labelType("percent")
           .donut(true)
           .donutRatio(0.35)
-          .color(function(d){return d.color})
+          .color(function(d){return d.data.color})
           ;
 
         d3.select("#chart2 svg")
@@ -106,7 +106,6 @@ d3.json("dailyhist",function(data){
 
     chart.yAxis
         .tickFormat(d3.format('$,1'));
-console.log(data)
     d3.select('#hist svg')
         .datum(data)
         .call(chart);
