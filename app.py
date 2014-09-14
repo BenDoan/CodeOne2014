@@ -30,6 +30,10 @@ def get_bucket(ident):
 def index():
     return render_template("index.html")
 
+@app.route('/budget', methods=['GET', 'POST'])
+def budget():
+    return render_template("budget.html")
+
 @app.route('/transactions',methods=['GET',"POST"])
 def transactions():
     if request.method == "POST":
@@ -72,16 +76,16 @@ def month_transactions_per_bucket():
     d = {}
     a1 = []
     for e in g.data['transactions']:
-        today = datetime.date.today()
-        first = datetime.date(day=1, month=today.month, year=today.year)
-        lastMonth = first - datetime.timedelta(days=30)
+        #today = datetime.date.today()
+        #first = datetime.date(day=1, month=today.month, year=today.year)
+        #lastMonth = first - datetime.timedelta(days=30)
 
         date = time.mktime(time.strptime(e.metadata['Post Dt'], "%m/%d/%Y"))
-        if date < lastMonth:
-            continue
+        #if date < lastMonth:
+            #continue
 
         entry = [int(date)*1000, e.amount]
-        bname = e.metadata['Merchant Type']
+        bname = str(e.metadata['Merchant Type'])[0:15]
         if bname in d:
             d[bname].append(entry)
         else:

@@ -303,4 +303,17 @@ textarea {
     }
 }
 
-/*svg .tooltip { opacity: 1; }*/
+
+
+body {
+    padding-top: 70px;
+}
+
+div.navbar {
+    /*background-color: #0D723C;*/
+    color: #FFF;
+}
+
+
+
+
