@@ -35,13 +35,18 @@ def budget():
 def investments():
     return render_template("investments.html")
 
+@app.route('/loans', methods=['GET', 'POST'])
+def loans():
+    return render_template("debt.html")
+
 @app.route('/add_bucket', methods=['GET', 'POST'])
 def add_bucket():
     return render_template("add_bucket.html")
 
 @app.route('/action_add_bucket', methods=['GET', 'POST'])
 def action_add_bucket():
-    g.data['buckets'].append(Bucket(request.form['name']))
+    if " " not in request.form['name']:
+        g.data['buckets'].append(Bucket(request.form['name']))
     return redirect("/budget")
 
 @app.route('/budget_val_ingest', methods=['GET', 'POST'])

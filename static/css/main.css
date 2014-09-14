@@ -314,6 +314,6 @@ div.navbar {
     color: #FFF;
 }
 
-
-
-
+ul.nav > li > a.active {
+    color:white;
+}
