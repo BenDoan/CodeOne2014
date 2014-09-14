@@ -20,59 +20,33 @@ d3.json("bucket-values.json", function(data){
 });
 
 
-//d3.json("month-transactions-per-bucket.json", function(data){
-    //nv.addGraph(function() {
-        //var chart = nv.models.cumulativeLineChart()
-                      //.x(function(d) { return d[0] })
-                      //.y(function(d) { return d[1] })
-                      //.color(d3.scale.category10().range())
-                      //.useInteractiveGuideline(true)
-                      //;
 
-         //chart.xAxis
-            //.tickFormat(function(d) {
-                //return d3.time.format('%x')(new Date(d))
-          //});
-
-        //chart.yAxis
-            //.tickFormat(d3.format('+$,.2f'));
-
-        //d3.select('#chart svg')
-            //.datum(data)
-            //.call(chart);
-
-        ////TODO: Figure out a good way to do this automatically
-        //nv.utils.windowResize(chart.update);
-
-        //return chart;
-    //});
-//})
-
-d3.json("bucketmap",function(data){
-console.log(data);
-vals = {};
-for(var val in data){
-    vals[val] = data[val];
-}
-    console.log(vals);
+d3.json("dailyhist",function(data){
   nv.addGraph(function() {
-    var chart = nv.models.cumulativeLineChart()
+    var chart = nv.models.multiBarChart()
+      .transitionDuration(350)
+      .reduceXTicks(true)   //If 'false', every single x-axis tick label will be rendered.
+      .rotateLabels(0)      //Angle to rotate x-axis labels.
+      .showControls(true)   //Allow user to switch between 'Grouped' and 'Stacked' mode.
+      .groupSpacing(0.1)    //Distance between each group of bars.
+    ;
+    /*var chart = nv.models.cumulativeLineChart()
                   .x(function(d) { return d[0] })
                   .y(function(d) { return d[1]/100 }) //adjusting, 100% is 1.00, not 100 as it is in the data
                   .color(d3.scale.category10().range())
                   .useInteractiveGuideline(true)
-                  ;
+                  ;*/
 
      chart.xAxis
-        .tickValues([1078030800000,1122782400000,1167541200000,1251691200000])
+        .tickValues([1078030800,1122782400,1167541200,1251691200])
         .tickFormat(function(d) {
-            return d3.time.format('%x')(new Date(d))
+            return d3.time.format('%x')(new Date(d*1000))
           });
 
     chart.yAxis
-        .tickFormat(d3.format(',.1%'));
-
-    d3.select('#chart svg')
+        .tickFormat(d3.format('$,1'));
+console.log(data)
+    d3.select('#hist svg')
         .datum(data)
         .call(chart);
 

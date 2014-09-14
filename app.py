@@ -100,6 +100,33 @@ def ingest():
     g.data["transactions"].sort(key =lambda x : x.date)
     return ":-}"
 
+@app.route('/dailyhist',methods=["GET"])
+def dailyhist():
+    out = {}
+    for x in g.data["buckets"] :
+        out[x.name]={}
+    out["unknown"]={}
+    for t in g.data["transactions"] :
+        remainder = t.amount
+        for b in t.buckets :
+            if t.date not in out[b[0].name] :
+                out[b[0].name][t.date] = 0
+            out[b[0].name][t.date] += b[1]*t.amount
+            remainder -= b[1]*t.amount
+        if t.date not in out["unknown"]:
+            out["unknown"][t.date] = 0
+        out["unknown"][t.date] += remainder
+    rout = []
+    for k in out :
+        tmp = []
+        for x in out[k] :
+            tmp.append({"x":x,"y":out[k][x]/100.0})
+        tmp.sort(key=lambda x:x["x"])
+        rout.append({"key":k,"values":tmp})
+    print rout
+    return json.dumps(rout)
+
+
 @app.route('/month-transactions-per-bucket.json',methods=['GET'])
 def month_transactions_per_bucket():
     d = {}
