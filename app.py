@@ -80,6 +80,7 @@ def bucketmap():
 def ingest():
     with open(request.args.get("fname"),"r") as fil:
         g.data["transactions"].extend(map(transaction.create,json.load(fil)))
+    g.data["transactions"].sort(key =lambda x : x.date)
     return ":-}"
 
 @app.route('/month-transactions-per-bucket.json',methods=['GET'])

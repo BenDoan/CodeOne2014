@@ -4,6 +4,10 @@ class Bucket():
         self.name = name
         self.active = active
         self.mutable = mutable
+        val = 0
+        for c in self.name :
+            val += ord(c)
+        self.color = "hsl("+str(255*((val*135)%251)/251.0)+",100%,50%)"
     def __str__(self):
         return json.dumps(self.json())
     def json(self):

@@ -1,20 +1,23 @@
 import json
+import time
 import bucket
 import hashlib
 
 
-dumbfields = ["description","id","amount","metadata","account","date"]
+dumbfields = ["name","description","id","amount","metadata","account","date"]
 def create(json):
     print bucket.mapping
     buckets = []
     imap = {}
     dmap = {
-        "Trans Desc":"description",
+        "Trans Desc":"name",
+        "Tran Detail Desc":"description",
         "id":"id",
         "Acct Nbr":"account",
         "Post Dt":"date"}
     for x in dmap :
         imap[dmap[x]] = json[x]
+    imap["date"] = time.mktime(time.strptime(imap["date"],"%m/%d/%Y"))
     imap["metadata"] = json
     imap["amount"] = int(100*float(json["Tran Amt"]))
     imap["key"] = hashlib.md5(str(imap["account"])+"-"+str(imap["id"])).hexdigest()
