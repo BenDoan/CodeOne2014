@@ -38,31 +38,17 @@
                 </tr>
             </thead>
             <tbody>
+            {% for transaction in g.data["transactions"] %}
                 <tr>
-                    <td>$5.00</td>
-                    <td>CodeOne diner</td>
-                    <td>Food</td>
+                    <td>${{transaction.amount/100.0}}</td>
+                    <td>{{transaction.description}}</td>
+                    <td><div class="progress">
+                        {% for bucket in transaction.buckets %}
+                        <div class="progress-bar" style="width: {{bucket[1]*100}}%"><span class="sr-only">{{bucket[0].name}}: $ {{(bucket[1]*transaction.amount)/100.0}}</span></div>
+                        {% endfor %}
+                    </div></td>
                 </tr>
-                <tr>
-                    <td>$5.00</td>
-                    <td>CodeOne diner</td>
-                    <td>Food</td>
-                </tr>
-                <tr>
-                    <td>$5.00</td>
-                    <td>CodeOne diner</td>
-                    <td>Food</td>
-                </tr>
-                <tr>
-                    <td>$5.00</td>
-                    <td>CodeOne diner</td>
-                    <td>Food</td>
-                </tr>
-                <tr>
-                    <td>$5.00</td>
-                    <td>CodeOne diner</td>
-                    <td>Food</td>
-                </tr>
+            {%endfor%}
             </tbody>
         </table>
     </div>

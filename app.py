@@ -32,7 +32,7 @@ def map_b2t():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template("pie.html")
+    return render_template("index.html")
 
 @app.route('/budget', methods=['GET', 'POST'])
 def budget():
