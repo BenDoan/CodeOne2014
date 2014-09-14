@@ -8,6 +8,8 @@ from functools import wraps
 from flask import *
 from transaction import Transaction
 from bucket import Bucket
+import bucket
+import transaction
 DATA_FNAME = '/tmp/data.p'
 
 app = Flask(__name__)
@@ -16,14 +18,19 @@ app.config['DEBUG'] = True
 app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 
-def get_bucket(ident):
-    for b in g.data["buckets"]:
-        if b.ident == ident :
-            return b
-    return None
+def map_b2t():
+    out = {}
+    for b in g.data["buckets"] :
+        out[b.name] = []
+        for t in g.data["transactions"]:
+            for x in t.buckets :
+                if x[0] == b :
+                    out[b.name].append(t.json())
+                    break
+    return out
+        
 
-
-@app.route('/', methods=['GET', 'POST'])
+app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template("index.html")
 
@@ -57,12 +64,14 @@ def buckets():
             g.data["buckets"].append(Bucket(request.args.get("name"),len(g.data["buckets"])))
     return json.dumps(map(Bucket.json,g.data["buckets"]))
 
+@app.route("/asdf",methods=["GET"])
+def func():
+    return json.dumps(map_b2t())
+
 @app.route("/ingest",methods=["GET"])
 def ingest():
     with open(request.args.get("fname"),"r") as fil:
-        g.data["transactions"].extend(map(
-            lambda x: Transaction(int(x["id"]if "id" in x else 0),x["Trans Desc"],int(100*float(x["Tran Amt"])),x),
-            json.load(fil)))
+        g.data["transactions"].extend(map(transaction.create,json.load(fil)))
     return ":-}"
 
 @app.before_request
@@ -71,7 +80,7 @@ def before_request():
     if path.isfile(DATA_FNAME):
         g.data = pickle.load(open(DATA_FNAME, "rb"))
     else:
-        g.data = {"transactions":[],"buckets":[]}
+        g.data = {"transactions":[],"buckets":bucket.defaults.values()}
 
 @app.teardown_request
 def teardown_request(exception):

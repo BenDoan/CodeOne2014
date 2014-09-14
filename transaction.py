@@ -1,19 +1,41 @@
 import json
+import bucket
+import hashlib
 
+
+dumbfields = ["description","id","amount","metadata","account"]
+def create(json):
+    print bucket.mapping
+    buckets = []
+    imap = {}
+    dmap = {
+        "Trans Desc":"description",
+        "id":"id",
+        "Acct Nbr":"account"}
+    for x in dmap :
+        imap[dmap[x]] = json[x]
+    imap["metadata"] = json
+    imap["amount"] = int(100*float(json["Tran Amt"]))
+    imap["key"] = hashlib.md5(str(imap["account"])+"-"+str(imap["id"])).hexdigest()
+    if json["Category"] in bucket.mapping:
+        print "YEP"
+        buckets.append([bucket.mapping[json["Category"]],1.0])
+    imap["buckets"] = buckets
+    return Transaction(**imap)
 class Transaction():
-    def __init__(self,ident,name, amount, metadata, buckets = []):
-        self.ident = ident
-        self.name = name
-        self.amount = amount
-        self.metadata = metadata
+    def __init__(self,buckets = [],key = "",**kwargs):
+        print(buckets)
+        self.dat = {}
+        for f in dumbfields :
+            self.__dict__[f] = kwargs[f]
         self.buckets = buckets
-    def bucketset(self,val):
-        self.buckets = json.loads(val)
+        self.key = key
     def __str__(self):
         return json.dumps(self.json())
     def json(self):
-        return {"ident":self.ident,
-            "name": self.name,
-            "amount": self.amount,
-            "buckets": self.buckets,
-            "metadata": self.metadata}
+        out = {}
+        for f in dumbfields :
+            out[f] = self.__dict__[f]
+        out["key"] = self.key
+        out["buckets"]=map(lambda x : [x[0].name,x[1]],self.buckets)
+        return out
